@@ -7,6 +7,7 @@ Created on Tue May 23 21:17:44 2023
 
 import pandas as pd
 import os
+from datetime import date
 
 def define_path(mySource):
     myLaptop = "TBD"
@@ -48,16 +49,16 @@ def build_master(myPath, myLookup, myStart, myEnd):
                       column = "Type",
                       value = row['Type'])
         myMaster = pd.concat([myMaster,fileDf], axis="rows")
-        myMaster = myMaster.reset_index(drop=True)
-    
+        
+    myMaster = myMaster.reset_index(drop=True)
     return myMaster
 
 # define variables
 source = "desktop"
 startLetter = "a"
-endLetter = "b"
-startDate = "2010-01-01"
-endDate = "2011-12-31"
+endLetter = "c"
+startDate = "2018-01-01"
+endDate = "2020-12-31"
 
 # build path and blank dfs
 absolutePath = define_path(source)
@@ -80,4 +81,9 @@ lookupFile['Symbol'] = lookupFile.Filename.str.split(".").str[0]
 print("Build masterFile")
 masterFile = build_master(absolutePath, lookupFile, startDate, endDate)
 
+#export to csv
+exportName = absolutePath + "output_" + str(date.today()) + ".csv"
+masterFile.to_csv(exportName)
+
 print(masterFile)
+print(exportName)
